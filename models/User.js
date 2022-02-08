@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-export default mongoose.model('User', new mongoose.Schema({
+module.exports = mongoose.model('User', new mongoose.Schema({
 	username: String,
 	email: String,
 	password: String,
