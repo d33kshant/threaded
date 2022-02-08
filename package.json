@@ -1,0 +1,19 @@
+{
+  "name": "threaded",
+  "version": "1.0.0",
+  "description": "Thread based image-based bulletin board",
+  "main": "index.js",
+  "author": "d33kshant",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon index --ignore client"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
