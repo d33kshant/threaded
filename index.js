@@ -1,13 +1,19 @@
 require('dotenv').config()
 const express = require('express')
+const mongoose = require('mongoose')
 
 const authRoute = require('./routes/AuthRoutes')
 
 const PORT = process.env.PORT || 5000
+const DB_URI = process.env.DB_URI
 
 const app = express()
 app.use(express.json())
 
 app.use('/api/auth', authRoute)
 
-app.listen(PORT, () => console.log('Sever listening on port:', PORT))
+mongoose.connect(DB_URI, (error) => {
+	if (error) return console.log("Can't connect to database.")
+	console.log('Connected to database.')
+	app.listen(PORT, () => console.log('Sever listening on port:', PORT))
+})
