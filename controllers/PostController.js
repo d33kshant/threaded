@@ -4,6 +4,7 @@ const ObjectId = require('mongoose').Types.ObjectId
 const getPost = async (req, res) => {
 	try {
 		const id = req.params.id
+		const username = req.user?.username || ""
 		if (id) {
 			const post = await Post.aggregate([
 				{ 
@@ -12,7 +13,16 @@ const getPost = async (req, res) => {
 				{ 
 					$project: {
 						body: 1, author: 1, time: 1, board: 1, ref: 1,
-						likes: { $size: "$likes" }
+						likes: { $size: "$likes" },
+						liked: { 
+							$cond: [{
+								$gt: [{
+									$size: {
+										$setIntersection: ["$likes", [username]]
+									}
+								}, 0]
+							}, true, false] 
+						}
 					} 
 				}
 			])
@@ -44,6 +54,7 @@ const getPosts = async (req, res) => {
 		})
 	}
 
+	const username = req.user?.username || ""
 	const page = req.query.page || 1
 	const POST_PER_PAGE = 10
 
@@ -56,7 +67,16 @@ const getPosts = async (req, res) => {
 			{ 
 				$project: {
 					body: 1, author: 1, time: 1, board: 1, ref: 1,
-					likes: { $size: "$likes" }
+					likes: { $size: "$likes" },
+					liked: { 
+						$cond: [{
+							$gt: [{
+								$size: {
+									$setIntersection: ["$likes", [username]]
+								}
+							}, 0]
+						}, true, false] 
+					}
 				} 
 			},
 			{
