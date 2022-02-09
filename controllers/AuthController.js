@@ -11,7 +11,7 @@ const signup = async (req, res) => {
 			const __user = await User.findOne({ email })
 
 			if( _user || __user ) {
-				res.json({
+				res.status(400).json({
 					error: "Username or email already exist."
 				})
 			} else {
@@ -35,13 +35,13 @@ const signup = async (req, res) => {
 				})
 			}
 		} else {
-			res.json({
+			res.status(400).json({
 				error: "Required fields cannot be empty."
 			})
 		}
 
 	} catch (error) {
-		res.json({
+		res.status(500).json({
 			error: "Something went wrong, Please try again.",
 			log: error
 		})
@@ -51,10 +51,17 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
 	try {
 		const { username, password } = req.body
+		
+		if (!username || !password) {
+			return res.status(400).json({
+				error: "Required fields cannot be empty."
+			})
+		}
+		
 		const user = await User.findOne({ username })
 
 		if (!user){
-			res.json({
+			res.status(404).json({
 				error: "Invalid username or password."
 			})
 		} else {
@@ -70,19 +77,19 @@ const login = async (req, res) => {
 						token: `Bearer ${token}`
 					})
 				} else {
-					res.json({
+					res.status(500).json({
 						error: "Failed to authenticate, Please try again."
 					})
 				}
 			} else {
-				res.json({
+				res.status(404).json({
 					error: "Invalid username or password."
 				})	
 			}
 		}
 
 	} catch (error) {
-		res.json({
+		res.status(500).json({
 			error: "Something went wrong, Please try again."
 		})
 	}
@@ -92,7 +99,7 @@ const verify = (req, res, next) => {
 	const token = req.headers["x-access-token"]?.split(' ')[1]
 	if (token) {
 		jwt.verify(token, process.env.SECRET, (error, user) => {
-			if (error) return res.json({
+			if (error) return res.status(400).json({
 				login: false,
 				message: "Auth token expired or invalid, please login again."
 			})
@@ -103,7 +110,7 @@ const verify = (req, res, next) => {
 			next()
 		})
 	} else {
-		res.json({
+		res.status(400).json({
 			login: false,
 			message: "Failed to authenticate, please login again."
 		})
