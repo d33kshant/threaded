@@ -112,7 +112,7 @@ const verify = (req, res, next) => {
 	} else {
 		res.status(400).json({
 			login: false,
-			message: "Failed to authenticate, please login again."
+			message: "Failed to authenticate."
 		})
 	}
 }
