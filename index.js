@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 
 const authRoute = require('./routes/AuthRoutes')
+const postRoute = require('./routes/PostRoutes')
 
 const PORT = process.env.PORT || 5000
 const DB_URI = process.env.DB_URI
@@ -11,6 +12,7 @@ const app = express()
 app.use(express.json())
 
 app.use('/api/auth', authRoute)
+app.use('/api/post', postRoute)
 
 mongoose.connect(DB_URI, (error) => {
 	if (error) return console.log("Can't connect to database.")
