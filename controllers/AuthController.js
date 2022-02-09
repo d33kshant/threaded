@@ -95,7 +95,7 @@ const login = async (req, res) => {
 	}
 }
 
-const verify = (req, res, next) => {
+const authenticate = (req, res, next) => {
 	const token = req.headers["x-access-token"]?.split(' ')[1]
 	if (token) {
 		jwt.verify(token, process.env.SECRET, (error, user) => {
@@ -117,4 +117,19 @@ const verify = (req, res, next) => {
 	}
 }
 
-module.exports = { login, signup, verify }
+const authorize = (req, res, next) => {
+	const token = req.headers["x-access-token"]?.split(' ')[1]
+	if (token) {
+		jwt.verify(token, process.env.SECRET, (error, user) => {
+			if(!error) {
+				req.user = {
+					id: user.id,
+					username: user.username
+				}
+			}
+		})
+	}
+	next()
+}
+
+module.exports = { login, signup, authenticate, authorize }
