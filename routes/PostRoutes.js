@@ -1,11 +1,11 @@
 const router = require('express').Router()
 const { getPost, getPosts, createPost } = require('../controllers/PostController')
-const { verify } = require('../controllers/AuthController')
+const { authenticate, authorize } = require('../controllers/AuthController')
 
-router.get('/:id', getPost)
+router.get('/:id', authorize, getPost)
 
-router.get('/', getPosts)
+router.get('/', authorize, getPosts)
 
-router.post('/create', verify, createPost)
+router.post('/create', authenticate, createPost)
 
 module.exports = router
