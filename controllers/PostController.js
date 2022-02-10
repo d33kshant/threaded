@@ -119,8 +119,8 @@ const createPost = async (req, res) => {
 
 		const { _id: id } = await post.save()
 		res.json({
+			post: id,
 			message: "New post is created.",
-			id
 		})
 	} catch (error) {
 		res.json(error)
