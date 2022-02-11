@@ -13,7 +13,7 @@ const getPost = async (req, res) => {
 				{ 
 					$project: {
 						body: 1, author: 1, time: 1, board: 1, ref: 1,
-						likes: { $size: "$likes" },
+						likes: { $size: "$likes" }, replies: { $size: "$replies" },
 						liked: { 
 							$cond: [{
 								$gt: [{
@@ -62,12 +62,12 @@ const getPosts = async (req, res) => {
 
 		const posts = await Post.aggregate([
 			{
-				$match: { board },
+				$match: { board, ref: "" },
 			},
 			{ 
 				$project: {
 					body: 1, author: 1, time: 1, board: 1, ref: 1,
-					likes: { $size: "$likes" },
+					likes: { $size: "$likes" }, replies: { $size: "$replies" },
 					liked: { 
 						$cond: [{
 							$gt: [{
@@ -95,7 +95,7 @@ const getPosts = async (req, res) => {
 
 const createPost = async (req, res) => {
 	const { body, board } = req.body
-	const ref = req.body.ref || ""
+	const ref = req.body.ref
 	const time = new Date()
 	const { username: author} = req.user
 	const likes = [ author ]
@@ -108,6 +108,16 @@ const createPost = async (req, res) => {
 
 	try {
 
+		let refPost
+		if (ref) {
+			refPost = await Post.findById(ref)
+			if (!refPost) {
+				return res.json({
+					error: "Reference post not found."
+				})
+			}
+		}
+
 		const post = new Post({
 			body,
 			ref,
@@ -118,6 +128,12 @@ const createPost = async (req, res) => {
 		})
 
 		const { _id: id } = await post.save()
+
+		if (refPost) {
+			refPost.replies.push(id)
+			await refPost.save()
+		}
+
 		res.json({
 			post: id,
 			message: "New post is created.",
@@ -127,4 +143,54 @@ const createPost = async (req, res) => {
 	}
 }
 
-module.exports = { getPost, getPosts, createPost }
+const likePost = async (req, res) => {
+	const { username } = req.user
+	const { id: postId } = req.body
+
+	if (!username) {
+		return res.status(401).json({
+			error: "Failed to authenticate."
+		})
+	}
+
+	if (!postId) {
+		return res.json({
+			error: "Post `id` missing in requeest."
+		})
+	}
+
+	try {
+		const post = await Post.findById(postId)
+		
+		if (!post) {
+			return res.status(404).json({
+				error: "Post not found."
+			})
+		}
+
+		if (post.likes.indexOf(username) !== -1) {
+			post.likes = post.likes.filter(user=>user!==username)
+			await post.save()
+
+			res.json({
+				liked: false,
+				message: "Post disliked."
+			})
+		} else {
+			post.likes.push(username)
+			await post.save()
+
+			res.json({
+				liked: true,
+				message: "Post liked."
+			})
+		}
+
+	} catch (error) {
+		res.status(500).json({
+			error: "Something went wrong."
+		})
+	}
+}
+
+module.exports = { getPost, getPosts, createPost, likePost }
