@@ -5,5 +5,6 @@ module.exports = mongoose.model('Post', new mongoose.Schema({
 	author: String,
 	ref: String,
 	board: String,
-	likes: [String]
+	likes: [String],
+	replies: [String]
 }))
