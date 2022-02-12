@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const 
 
 const authRoute = require('./routes/AuthRoutes')
 const postRoute = require('./routes/PostRoutes')
@@ -11,6 +12,7 @@ const DB_URI = process.env.DB_URI
 
 const app = express()
 app.use(express.json())
+app.use(require('cookie-parser')())
 
 app.use('/api/auth', authRoute)
 app.use('/api/post', postRoute)
