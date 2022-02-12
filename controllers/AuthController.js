@@ -72,10 +72,8 @@ const login = async (req, res) => {
 					{ expiresIn: 86400 }
 				)
 				if (token) {
-					res.json({
-						message: "Login was successfull.",
-						token: `Bearer ${token}`
-					})
+					res.cookie('jwt-token', token, { httpOnly: true }).json({
+						message: "Login was successfull."})
 				} else {
 					res.status(500).json({
 						error: "Failed to authenticate, Please try again."
@@ -96,7 +94,7 @@ const login = async (req, res) => {
 }
 
 const authenticate = (req, res, next) => {
-	const token = req.headers["x-access-token"]?.split(' ')[1]
+	const token = req.cookies['jwt-token']
 	if (token) {
 		jwt.verify(token, process.env.SECRET, (error, user) => {
 			if (error) return res.status(400).json({
@@ -118,7 +116,7 @@ const authenticate = (req, res, next) => {
 }
 
 const authorize = (req, res, next) => {
-	const token = req.headers["x-access-token"]?.split(' ')[1]
+	const token = req.cookies['jwt-token']
 	if (token) {
 		jwt.verify(token, process.env.SECRET, (error, user) => {
 			if(!error) {
