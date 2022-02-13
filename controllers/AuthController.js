@@ -73,7 +73,10 @@ const login = async (req, res) => {
 				)
 				if (token) {
 					res.cookie('jwt-token', token, { httpOnly: true }).json({
-						message: "Login was successfull."})
+						username: user.username,
+						id: user.id,
+						token: token
+					})
 				} else {
 					res.status(500).json({
 						error: "Failed to authenticate, Please try again."
@@ -91,6 +94,18 @@ const login = async (req, res) => {
 			error: "Something went wrong, Please try again."
 		})
 	}
+}
+
+const verify = (req, res) => {
+	const { token } = req.query
+	jwt.verify(token, process.env.SECRET, (error, user) => {
+		if (error) {
+			return res.json({
+				error: "Invalid auth token."
+			})
+		}
+		return res.json(user)
+	})
 }
 
 const authenticate = (req, res, next) => {
@@ -130,4 +145,4 @@ const authorize = (req, res, next) => {
 	next()
 }
 
-module.exports = { login, signup, authenticate, authorize }
+module.exports = { login, signup, authenticate, authorize, verify }
