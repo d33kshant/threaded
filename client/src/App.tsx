@@ -6,6 +6,7 @@ import {
 	Navigate
 } from 'react-router-dom'
 import AuthProvider from './contexts/AuthContext'
+import BoardPage from './pages/BoardPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
@@ -30,11 +31,17 @@ function App() {
 		}
 	}, [])
 
+	const login = (user: User | null) => {
+		setUser(user)
+	}
+
 	return (
-		<AuthProvider value={{ user, setUser }} >
+		<AuthProvider value={{ user, setUser: login }} >
 			<Router>
 				<Routes>
 					<Route path="/" element={<HomePage/>} />
+					<Route path="/board/:board" element={<BoardPage />} />
+					<Route path="/board" element={<Navigate to="/" replace={true} />} />
 					<Route path="/login" element={ user ? <Navigate to="/" /> : <LoginPage/> } />
 					<Route path="/signup" element={ user ? <Navigate to="/" /> : <SignUpPage/> } />
 				</Routes>
