@@ -1,13 +1,18 @@
-import { useAuthContext } from "../contexts/AuthContext"
+// import { useAuthContext } from "../contexts/AuthContext"
+
+import NavBar from "../components/NavBar"
 
 const HomePage: React.FC = () => {
 	
-	const { user } = useAuthContext()
+	// const { user } = useAuthContext()
 	
 	return (
+		<>
+		<NavBar />
 		<div>
-			{ user ? <p>Username: {user.username} <br/> Id: {user.id}</p> : <p>Home Page <br /> <a href="/login">Login</a> </p> }
+			Home Page	
 		</div>
+		</>
 	)
 }
 
