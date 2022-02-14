@@ -1,4 +1,5 @@
 import { useState } from "react"
+import styled from "styled-components"
 import { useAuthContext } from "../contexts/AuthContext"
 import LoginFormState from "../types/LoginFormState"
 
@@ -36,15 +37,79 @@ const LoginPage: React.FC = () => {
 	}
 
 	return (
-		<div>
-			<form onSubmit={onFormSubmit}>
-				<input value={formState.username} onChange={onFormStateChange} autoComplete="off" name="username" type="text" placeholder="Username" />
-				<input value={formState.password} onChange={onFormStateChange} name="password" type="password" placeholder="Password" />
-				<button type="submit">Login</button>
-				<br /><span>Don't have an account? <a href="/signup">Sign Up</a></span>
-			</form>
-		</div>
+		<Container>
+			<LoginForm onSubmit={onFormSubmit}>
+				<LoginFormTitle>Login to Threaded</LoginFormTitle>
+				<LoginInput value={formState.username} onChange={onFormStateChange} autoComplete="off" name="username" type="text" placeholder="Username" />
+				<LoginInput value={formState.password} onChange={onFormStateChange} name="password" type="password" placeholder="Password" />
+				<LoginButton type="submit">Login</LoginButton>
+				<span>Don't have an account? <a href="/signup">Sign Up</a></span>
+			</LoginForm>
+		</Container>
 	)
 }
 
 export default LoginPage
+
+const Container = styled.div`
+	width: 100%;
+	height: 100%;
+	padding: 16px;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	/* text-align: center; */
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+`
+
+const LoginForm = styled.form`
+	width: max-content;
+	display: flex;
+	flex-direction: column;
+	/* align-items: center; */
+	gap: 4px;
+	padding: 16px;
+	box-sizing: border-box;
+	border: 1px solid lightgray;
+	border-radius: 8px;
+
+	a {
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+`
+
+const LoginFormTitle = styled.span`
+	font-weight: 600;
+	font-size: 18px;
+	margin: 0;
+	margin-bottom: 12px;
+`
+
+const LoginInput = styled.input`
+	padding: 4px 8px;
+	border: 1px solid gray;
+	border-radius: 4px;
+	font-family: inherit;
+`
+
+const LoginButton = styled.button`
+	width: 100%;
+	max-width: 100px;
+	border: 1px solid gray;
+	border-radius: 4px;
+	font-family: inherit;
+	padding: 4px 16px;
+	margin-top: 4px;
+	margin-bottom: 8px;
+	cursor: pointer;
+
+	:hover {
+		background: lightgray;
+	}
+`
