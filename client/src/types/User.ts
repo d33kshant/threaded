@@ -1,5 +1,11 @@
 export default interface User {
+	_id: string,
 	username: string,
-	id: string,
+	email: string,
 	token: string,
+	avatar: string,
+	bio: string,
+	follow: string[],
+	boards: string[],
+	joined: Date,
 }
