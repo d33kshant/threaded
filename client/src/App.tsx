@@ -5,6 +5,7 @@ import {
 	Route,
 	Navigate
 } from 'react-router-dom'
+import NavBar from './components/NavBar'
 import AuthProvider from './contexts/AuthContext'
 import BoardPage from './pages/BoardPage'
 import HomePage from './pages/HomePage'
@@ -38,6 +39,7 @@ function App() {
 	return (
 		<AuthProvider value={{ user, setUser: login }} >
 			<Router>
+				<NavBar />
 				<Routes>
 					<Route path="/" element={<HomePage/>} />
 					<Route path="/board/:board" element={<BoardPage />} />
