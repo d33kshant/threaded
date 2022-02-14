@@ -72,6 +72,7 @@ const login = async (req, res) => {
 					{ expiresIn: 86400 }
 				)
 				if (token) {
+					res.clearCookie("jwt-token")
 					res.cookie('jwt-token', token, { httpOnly: true }).json({
 						username: user.username,
 						id: user.id,
@@ -113,7 +114,7 @@ const authenticate = (req, res, next) => {
 	if (token) {
 		jwt.verify(token, process.env.SECRET, (error, user) => {
 			if (error) return res.status(400).json({
-				login: false,
+				requireAuth: true,
 				message: "Auth token expired or invalid, please login again."
 			})
 			req.user = {
@@ -124,7 +125,7 @@ const authenticate = (req, res, next) => {
 		})
 	} else {
 		res.status(400).json({
-			login: false,
+			requireAuth: true,
 			message: "Failed to authenticate."
 		})
 	}
