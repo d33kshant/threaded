@@ -99,12 +99,13 @@ const login = async (req, res) => {
 
 const verify = (req, res) => {
 	const { token } = req.query
-	jwt.verify(token, process.env.SECRET, (error, user) => {
+	jwt.verify(token, process.env.SECRET, async (error, result) => {
 		if (error) {
 			return res.json({
 				error: "Invalid auth token."
 			})
 		}
+		const user = await User.findOne({ username: result.username }, { password: 0, __v: 0 })
 		return res.json(user)
 	})
 }
