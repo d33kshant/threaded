@@ -35,8 +35,14 @@ function App() {
 		setUser(user)
 	}
 
+	const logout = () => {
+		localStorage.removeItem('jwt-token')
+		setUser(null)
+		window.location.reload()
+	}
+
 	return (
-		<AuthProvider value={{ user, setUser: login }} >
+		<AuthProvider value={{ user, login, logout }} >
 			<Router>
 				<Routes>
 					<Route path="/" element={<HomePage/>} />
