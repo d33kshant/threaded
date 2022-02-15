@@ -35,7 +35,7 @@ const SingUpForm = styled.form`
 	width: max-content;
 	display: flex;
 	flex-direction: column;
-	/* align-items: center; */
+	background: white;
 	gap: 4px;
 	padding: 16px;
 	box-sizing: border-box;
