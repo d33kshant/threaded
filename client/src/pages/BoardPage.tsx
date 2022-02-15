@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useAuthContext } from "../contexts/AuthContext"
 import Board from "../types/Board"
 
@@ -9,7 +9,7 @@ const BoardPage = () => {
 	const [joined, setJoined] = useState<boolean>(false)
 
 	const { board: name } = useParams()
-	const { setUser } = useAuthContext()
+	const { logout } = useAuthContext()
 
 	useEffect(() => {
 		if(name) {
@@ -34,7 +34,7 @@ const BoardPage = () => {
 		}).then(res=>res.json()).then(res=>{
 			if (res.requireAuth) {
 				console.log("Should relogin")
-				setUser(null)
+				logout()
 			}
 			if (res.error) {
 				return alert(res.error)
@@ -57,9 +57,8 @@ const BoardPage = () => {
 
 	return (
 		<div>
-			<h1>{board.name}</h1>
-			<p>Members: {board.members} Created: {(new Date(board.created)).toDateString()}</p>
-			<p>Creator: <a href={`/user/${board.creator}`}>@{board.creator}</a> <button onClick={onJoinButtonClick}>{joined ? "Leave Board" : "Join Board"}</button></p>
+			<p>{board.name}<br />Members: {board.members}<br /> Created: {(new Date(board.created)).toDateString()}
+			<br />Creator: <a href={`/user/${board.creator}`}>@{board.creator}</a><br /><button onClick={onJoinButtonClick}>{joined ? "Leave Board" : "Join Board"}</button></p>
 		</div>
 	)
 }
