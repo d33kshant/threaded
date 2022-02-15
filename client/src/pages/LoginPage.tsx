@@ -6,7 +6,7 @@ import LoginFormState from "../types/LoginFormState"
 const LoginPage: React.FC = () => {
 
 	const [ formState, setFormState ] = useState<LoginFormState>({ username: "", password: "" })
-	const { setUser } = useAuthContext()
+	const { login } = useAuthContext()
 
 	const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
@@ -20,7 +20,7 @@ const LoginPage: React.FC = () => {
 			if (res.error) {
 				return alert('Failed to login.')
 			}
-			setUser(res)
+			login(res)
 			localStorage.setItem('jwt-token', res.token)
 		})
 	}
@@ -58,7 +58,6 @@ const Container = styled.div`
 	box-sizing: border-box;
 	justify-content: center;
 	align-items: center;
-	/* text-align: center; */
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -68,7 +67,7 @@ const LoginForm = styled.form`
 	width: max-content;
 	display: flex;
 	flex-direction: column;
-	/* align-items: center; */
+	background: white;
 	gap: 4px;
 	padding: 16px;
 	box-sizing: border-box;
