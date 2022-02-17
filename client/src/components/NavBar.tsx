@@ -14,7 +14,7 @@ const NavBar = () => {
 					user ? 
 					<NavLinks>
 						<NavLink to={`/user/${user.username}`}>
-							<img src={user.avatar} height={24} style={{borderRadius: "50%"}} />
+							<img src={`http://localhost:3000/${user.avatar}`} height={24} style={{borderRadius: "50%"}} />
 						</NavLink>
 						{/* <NavLink onClick={logout} to="/">Log-Out</NavLink> */}
 					</NavLinks> : 
@@ -35,6 +35,9 @@ const Container = styled.header`
 	justify-content: center;
 	border-bottom: 1px solid lightgray;
 	background: white;
+	position: sticky;
+	top: 0;
+	z-index: 5;
 `
 
 const Nav = styled.nav`
