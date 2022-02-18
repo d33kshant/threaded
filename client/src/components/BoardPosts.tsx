@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
+import styled from "styled-components"
 import BoardPostsProps from "../types/BoardPostsProps"
 import Post from "../types/Post"
+import PostItem from "./Post"
 
 const BoardPosts: React.FC<BoardPostsProps> = ({ board }) => {
 	const [posts, setPosts] = useState<Post[]>([])
@@ -26,10 +28,16 @@ const BoardPosts: React.FC<BoardPostsProps> = ({ board }) => {
 	}
 
 	return (
-		<div>
-			{ posts.length > 0 ? posts.map(post=><p key={post._id}>{post.body}</p>) : "Nothing to show here" }
-		</div>
+		<Container>
+			{ posts.length > 0 ? posts.map(post=><PostItem key={post._id} data={post} />) : "Nothing to show here" }
+		</Container>
 	)
 }
 
 export default BoardPosts
+
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+`
