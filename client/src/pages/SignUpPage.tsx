@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 const SignUpPage: React.FC = () => {
@@ -8,10 +9,10 @@ const SignUpPage: React.FC = () => {
 				<SingUpFormTitle>Sign-Up to Threaded</SingUpFormTitle>
 				<SingUpInput name="username" type="text" placeholder="Username" />
 				<SingUpInput name="email" type="text" placeholder="Email" />
-				<SingUpInput name="password" type="text" placeholder="Password" />
-				<SingUpInput name="confirm-password" type="text" placeholder="Confirm Password" />
+				<SingUpInput name="password" type="password" placeholder="Password" />
+				<SingUpInput name="confirm-password" type="password" placeholder="Confirm Password" />
 				<SingUpButton type="submit">Sign Up</SingUpButton>
-				<span>Already have an account? <a href="/login">Log In</a></span>
+				<span>Already have an account? <Link to="/login">Log In</Link></span>
 			</SingUpForm>
 		</Container>
 	)
@@ -35,20 +36,21 @@ const SingUpForm = styled.form`
 	width: max-content;
 	display: flex;
 	flex-direction: column;
-	background: white;
-	gap: 4px;
+	/* background: white; */
+	gap: 8px;
 	padding: 16px;
 	box-sizing: border-box;
-	border: 1px solid lightgray;
+	/* border: 1px solid lightgray; */
 	border-radius: 8px;
 
 	a {
 		text-decoration: none;
+		color: #1d9bf0;
 	}
 
-	a:hover {
+	/* a:hover {
 		text-decoration: underline;
-	}
+	} */
 `
 
 const SingUpFormTitle = styled.span`
@@ -59,25 +61,29 @@ const SingUpFormTitle = styled.span`
 `
 
 const SingUpInput = styled.input`
-	padding: 4px 8px;
-	border: 1px solid gray;
+	padding: 8px;
+	border: 1px solid #6e767d;
 	border-radius: 4px;
 	font-family: inherit;
-	position: relative;
+	background: none;
+
+	:focus-visible {
+		outline: 1px solid #1d9bf0;
+		border-color: #1d9bf0;
+	}
 `
 
 const SingUpButton = styled.button`
-	width: 100%;
-	max-width: 100px;
-	border: 1px solid gray;
-	border-radius: 4px;
+	margin-top: 16px;
+	padding: 4px 8px;
+	background: #eff3f4;
+	border: none;
+	border-radius: 64px;
+	color: black;
 	font-family: inherit;
-	padding: 4px 16px;
-	margin-top: 4px;
-	margin-bottom: 8px;
+	font-weight: bold;
+	font-size: 16px;
+	/* text-transform: uppercase; */
 	cursor: pointer;
-
-	:hover {
-		background: lightgray;
-	}
+	margin-bottom: 8px;
 `
