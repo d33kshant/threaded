@@ -39,5 +39,15 @@ export default BoardPosts
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	/* gap: 8px; */
+	width: 100%;
+	height: 100%;
+	border-left: 1px solid #2F3336;
+	border-right: 1px solid #2F3336;
+	box-sizing: border-box;
+	/* padding: 8px; */
+
+	@media (max-width: 450px) {
+		border: none;
+	}
 `
