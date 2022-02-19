@@ -33,11 +33,13 @@ export default NavBar
 const Container = styled.header`
 	display: flex;
 	justify-content: center;
-	border-bottom: 1px solid lightgray;
-	background: white;
+	border-bottom: 1px solid #2F3336;
+	background: black;
+	box-sizing: border-box;
 	position: sticky;
 	top: 0;
 	z-index: 5;
+	height: 40px;
 `
 
 const Nav = styled.nav`
@@ -52,7 +54,7 @@ const Nav = styled.nav`
 
 const NavLogo = styled.a`
 	text-decoration: none;
-	color: black;
+	color: white;
 	font-weight: 600;
 `
 
