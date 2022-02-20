@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import Button from "../components/Button"
 
 const SignUpPage: React.FC = () => {
 	return (
@@ -73,17 +74,6 @@ const SingUpInput = styled.input`
 	}
 `
 
-const SingUpButton = styled.button`
-	margin-top: 16px;
-	padding: 4px 8px;
-	background: #eff3f4;
-	border: none;
-	border-radius: 64px;
-	color: black;
-	font-family: inherit;
-	font-weight: bold;
-	font-size: 16px;
-	/* text-transform: uppercase; */
-	cursor: pointer;
+const SingUpButton = styled(Button)`
 	margin-bottom: 8px;
 `
