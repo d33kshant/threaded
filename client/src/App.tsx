@@ -9,6 +9,7 @@ import AuthProvider from './contexts/AuthContext'
 import BoardPage from './pages/BoardPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import ProfilePage from './pages/ProfilePage'
 import SignUpPage from './pages/SignUpPage'
 import './styles/App.css'
 import User from './types/User'
@@ -48,6 +49,8 @@ function App() {
 					<Route path="/" element={<HomePage/>} />
 					<Route path="/board/:board" element={<BoardPage />} />
 					<Route path="/board" element={<Navigate to="/" replace={true} />} />
+					<Route path="/user/:username" element={<ProfilePage />} />
+					<Route path="/user" element={<Navigate to="/" replace={true} />} />
 					<Route path="/login" element={ user ? <Navigate to="/" /> : <LoginPage/> } />
 					<Route path="/signup" element={ user ? <Navigate to="/" /> : <SignUpPage/> } />
 				</Routes>
