@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const authRoute = require('./routes/AuthRoutes')
 const postRoute = require('./routes/PostRoutes')
 const boardRoute = require('./routes/BoardRoutes')
+const userRoute = require('./routes/UserRoutes')
 
 const PORT = process.env.PORT || 5000
 const DB_URI = process.env.DB_URI
@@ -16,6 +17,7 @@ app.use(require('cookie-parser')())
 app.use('/api/auth', authRoute)
 app.use('/api/post', postRoute)
 app.use('/api/board', boardRoute)
+app.use('/api/user', userRoute)
 
 mongoose.connect(DB_URI, (error) => {
 	if (error) return console.log("Can't connect to database.")
