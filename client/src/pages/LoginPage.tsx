@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useAuthContext } from "../contexts/AuthContext"
 import LoginFormState from "../types/LoginFormState"
 import Message, { MessageType } from "../types/Message"
+import Button from "../components/Button"
 
 const LoginPage: React.FC = () => {
 
@@ -117,18 +118,7 @@ const LoginInput = styled.input`
 	}
 `
 
-const LoginButton = styled.button`
-	margin-top: 16px;
-	padding: 4px 8px;
-	background: #eff3f4;
-	border: none;
-	border-radius: 64px;
-	color: black;
-	font-family: inherit;
-	font-weight: bold;
-	font-size: 16px;
-	/* text-transform: uppercase; */
-	cursor: pointer;
+const LoginButton = styled(Button)`
 	margin-bottom: 8px;
 `
 
