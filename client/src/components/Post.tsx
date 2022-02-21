@@ -2,9 +2,13 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import PostProps from "../types/PostProps"
 import moment from "moment"
+import { useNavigate } from "react-router-dom"
+import { useAuthContext } from "../contexts/AuthContext"
 
 const Post: React.FC<PostProps> = ({ data: { _id, author, body, time, liked: intialLiked, likes, replies } })=> {
 	const [liked, setLiked] = useState<boolean>(intialLiked)
+	const { logout } = useAuthContext()
+	const nevigate = useNavigate()
 
 	const onLikeButtonClick = () => {
 		fetch(`/api/post/like`, {
@@ -14,8 +18,13 @@ const Post: React.FC<PostProps> = ({ data: { _id, author, body, time, liked: int
 			},
 			body: JSON.stringify({ id: _id })
 		}).then(res=>res.json()).then(res=>{
+			// console.log(res)
 			if (res.error) {
 				return alert(res.error)
+			}
+			if (res.requireAuth) {
+				// logout()
+				return nevigate('/login')
 			}
 			setLiked(res.liked)
 		})
