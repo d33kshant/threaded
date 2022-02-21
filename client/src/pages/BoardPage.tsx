@@ -5,6 +5,8 @@ import NavBar from "../components/NavBar"
 import { useAuthContext } from "../contexts/AuthContext"
 import Board from "../types/Board"
 import BoardPosts from "../components/BoardPosts"
+import { useToastContext } from "../contexts/ToastContext"
+import { MessageType } from "../types/Message"
 
 const BoardPage = () => {
 	const [board, setBoard] = useState<Board | null>(null)
@@ -12,7 +14,7 @@ const BoardPage = () => {
 	const [joined, setJoined] = useState<boolean>(false)
 
 	const { board: name } = useParams()
-	const { logout } = useAuthContext()
+	const toast = useToastContext()
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -41,7 +43,7 @@ const BoardPage = () => {
 				return navigate('/login')
 			}
 			if (res.error) {
-				return alert(res.error)
+				return toast({ type: MessageType.Error, body: res.error })
 			}
 			setJoined(res.joined)
 		})

@@ -5,12 +5,14 @@ import { useAuthContext } from "../contexts/AuthContext"
 import LoginFormState from "../types/LoginFormState"
 import Message, { MessageType } from "../types/Message"
 import Button from "../components/Button"
+import { useToastContext } from "../contexts/ToastContext"
 
 const LoginPage: React.FC = () => {
 
 	const [ formState, setFormState ] = useState<LoginFormState>({ username: "", password: "" })
 	const [message, setMessage] = useState<Message | null>(null)
 	const { login } = useAuthContext()
+	const toast = useToastContext()
 
 	const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
@@ -22,13 +24,13 @@ const LoginPage: React.FC = () => {
 			body: JSON.stringify(formState),
 		}).then(res=>res.json()).then(res=>{
 			if (res.error) {
-				return setMessage({ type: MessageType.Error, body: res.error })
+				return toast({ type: MessageType.Error, body: res.error })
 			}
 			setTimeout(()=>{
 				login(res)
 				localStorage.setItem('jwt-token', res.token)
 			}, 1000)
-			setMessage({ type: MessageType.Success, body: "Login was successfull, taking you to homepage." })
+			toast({ type: MessageType.Success, body: "Logged-in successfull." })
 		})
 	}
 
@@ -52,13 +54,6 @@ const LoginPage: React.FC = () => {
 				<LoginButton type="submit">Login</LoginButton>
 				<span>Don't have an account? <Link to="/signup">Sign Up</Link></span>
 			</LoginForm>
-			{ message && 
-			<MessageBox id={message.type === MessageType.Error ? "error" : "success"}>
-				<MessageText>{message.body}</MessageText>
-				<CloseMessage onClick={()=>setMessage(null)}>
-					<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-				</CloseMessage>
-			</MessageBox>}
 		</Container>
 	)
 }
@@ -120,28 +115,4 @@ const LoginInput = styled.input`
 
 const LoginButton = styled(Button)`
 	margin-bottom: 8px;
-`
-
-const MessageBox = styled.div`
-	display: flex;
-	border: 1px solid;
-	padding: 4px 8px;
-	box-sizing: border-box;
-	align-items: center;
-	gap: 8px;
-	background: ${prop=>prop.id==="error" ? "#be193232" : "#00ba7c33"};
-	color: ${prop=>prop.id==="error" ? "#be1932" : "#00ba7c"};
-	border-color: ${prop=>prop.id==="error" ? "#be1932" : "#00ba7c"};
-`
-
-const MessageText = styled.p`
-	margin: 0;
-`
-
-const CloseMessage = styled.button`
-	padding: 0;
-	border: none;
-	background: none;
-	color: inherit;
-	cursor: pointer;
 `
