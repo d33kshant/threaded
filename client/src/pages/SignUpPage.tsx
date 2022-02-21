@@ -1,17 +1,32 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Button from "../components/Button"
+import SignUpFormState from "../types/SignUpFormState"
 
 const SignUpPage: React.FC = () => {
+
+	const [formState, setFormState] = useState<SignUpFormState>({ username: "", email: "", password: "", confirmPassword: "" })
+
+	const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		console.log(formState)
+	}
+
+	const onFormStateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const _formState: SignUpFormState = { ...formState }
+		_formState[event.target.name] = event.target.value
+		setFormState(_formState)
+	}
+
 	return (
 		<Container>
-			<SingUpForm>
+			<SingUpForm onSubmit={onFormSubmit} >
 				<SingUpFormTitle>Sign-Up to Threaded</SingUpFormTitle>
-				<SingUpInput name="username" type="text" placeholder="Username" />
-				<SingUpInput name="email" type="text" placeholder="Email" />
-				<SingUpInput name="password" type="password" placeholder="Password" />
-				<SingUpInput name="confirm-password" type="password" placeholder="Confirm Password" />
+				<SingUpInput onChange={onFormStateChange} value={formState.username} name="username" type="text" placeholder="Username" />
+				<SingUpInput onChange={onFormStateChange} value={formState.email} name="email" type="text" placeholder="Email" />
+				<SingUpInput onChange={onFormStateChange} value={formState.password} name="password" type="password" placeholder="Password" />
+				<SingUpInput onChange={onFormStateChange} value={formState.confirmPassword} name="confirmPassword" type="password" placeholder="Confirm Password" />
 				<SingUpButton type="submit">Sign Up</SingUpButton>
 				<span>Already have an account? <Link to="/login">Log In</Link></span>
 			</SingUpForm>
