@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import NavBar from "../components/NavBar"
 import { useAuthContext } from "../contexts/AuthContext"
@@ -13,6 +13,7 @@ const BoardPage = () => {
 
 	const { board: name } = useParams()
 	const { logout } = useAuthContext()
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if(name) {
@@ -36,8 +37,8 @@ const BoardPage = () => {
 			body: JSON.stringify({ name }),
 		}).then(res=>res.json()).then(res=>{
 			if (res.requireAuth) {
-				console.log("Should relogin")
-				logout()
+				// logout()
+				return navigate('/login')
 			}
 			if (res.error) {
 				return alert(res.error)
