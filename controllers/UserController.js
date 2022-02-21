@@ -38,10 +38,61 @@ const getUser = async (req, res) => {
 	}
 }
 
-const followUser = (req, res) => {
+const followUser = async (req, res) => {
 	const { username } = req.body
 	const { username: _username } = req.user
-	res.json(username)
+	
+	if(username === _username) {
+		return res.json({
+			error: "You can't follow yourself."
+		})
+	}
+
+	try {
+		const user = await User.findOne({ username })
+		const _user = await User.findOne({ username: _username })
+
+		if (user) {
+			return res.json({
+				error: "User not found."
+			})
+		}
+		
+		if (_user.follow.indexOf(user.username) !== -1) {
+			_user.follow = _user.follow.filter(person=>person!==user.username)
+			_user.save((error, _) => {
+				if (error) {
+					res.json({
+						error: "Something went wrong."
+					})
+				} else {
+					res.json({
+						following: false,
+						message: `Unfollowed ${user.username}`
+					})
+				}
+			})
+		} else {
+			_user.follow.push(user.username)
+			_user.save((error, _) => {
+				if (error) {
+					res.json({
+						error: "Something went wrong."
+					})
+				} else {
+					res.json({
+						following: true,
+						message: `Started following ${user.username}`
+					})
+				}
+			})
+		}
+
+	} catch (error) {
+		res.json({
+			error: "Something went wrong."
+		})
+	}
 }
 
 module.exports = { getUser, followUser }
