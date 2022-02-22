@@ -13,14 +13,14 @@ const NavBar = () => {
 				{ 
 					user ? 
 					<NavLinks>
-						<NavLink to={`/user/${user.username}`}>
+						<UserLink to={`/user/${user.username}`}>
 							<img src={`http://localhost:3000/${user.avatar}`} height={24} style={{borderRadius: "50%"}} />
-						</NavLink>
+						</UserLink>
 						{/* <NavLink onClick={logout} to="/">Log-Out</NavLink> */}
 					</NavLinks> : 
 					<NavLinks>
-						<NavLink to="/signup">Sign-Up</NavLink>
-						<NavLink to="/login">Login</NavLink>
+						<SignUpLink to="/signup">Sign-Up</SignUpLink>
+						<LoginLink to="/login">Login</LoginLink>
 					</NavLinks>
 				}
 			</Nav>
@@ -61,13 +61,35 @@ const NavLogo = styled.a`
 const NavLinks = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 16px;
+	gap: 8px;
+`
+
+const UserLink = styled(Link)`
+	text-decoration: none;
 `
 
 const NavLink = styled(Link)`
+	/* margin-top: 16px; */
+	padding: 4px 16px;
+	background: #eff3f4;
+	border: none;
+	border-radius: 64px;
+	color: black;
+	font-family: inherit;
+	font-weight: bold;
+	font-size: 14px;
 	text-decoration: none;
+	cursor: pointer;
+	box-sizing: border-box;
+`
 
-	:hover {
-		text-decoration: underline;
-	}
+const SignUpLink = styled(NavLink)`
+	background: #1d9bf0;
+	color: white;
+`
+
+const LoginLink = styled(NavLink)`
+	background: transparent;
+	border: 1px solid #eff3f4;
+	color: #eff3f4;
 `
