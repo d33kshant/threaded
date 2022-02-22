@@ -6,11 +6,11 @@ import LoginFormState from "../types/LoginFormState"
 import Message, { MessageType } from "../types/Message"
 import Button from "../components/Button"
 import { useToastContext } from "../contexts/ToastContext"
+import LoginInput from "../components/Input"
 
 const LoginPage: React.FC = () => {
 
 	const [ formState, setFormState ] = useState<LoginFormState>({ username: "", password: "" })
-	const [message, setMessage] = useState<Message | null>(null)
 	const { login } = useAuthContext()
 	const toast = useToastContext()
 
@@ -98,19 +98,6 @@ const LoginFormTitle = styled.span`
 	font-size: 18px;
 	margin: 0;
 	margin-bottom: 12px;
-`
-
-const LoginInput = styled.input`
-	padding: 8px;
-	border: 1px solid #6e767d;
-	border-radius: 4px;
-	font-family: inherit;
-	background: none;
-
-	:focus-visible {
-		outline: 1px solid #1d9bf0;
-		border-color: #1d9bf0;
-	}
 `
 
 const LoginButton = styled(Button)`
