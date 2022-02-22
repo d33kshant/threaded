@@ -35,7 +35,6 @@ const ProfilePage = () => {
 				<UserAvatar src={`http://localhost:3000/${user.avatar}`} alt={user.username} />
 				{ (user.username === currentUser?.username) ? 
 					<ProfileActions>
-						<EditProfileButton>Edit Profile</EditProfileButton>
 						<LogOutButton onClick={logout}>Log Out</LogOutButton>
 					</ProfileActions> 
 				: <Button>{user.inFollowing ? "Unfollow" : "Follow"}</Button>}
@@ -87,12 +86,6 @@ const Header = styled.div`
 const ProfileActions = styled.div`
 	display: flex;
 	gap: 8px;
-`
-
-const EditProfileButton = styled(Button)`
-	/* background: transparent;
-	border: 1px solid #eff3f4;
-	color: #eff3f4; */
 `
 
 const LogOutButton = styled(Button)`
