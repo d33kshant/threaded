@@ -1,6 +1,5 @@
 import styled from "styled-components"
 const Button = styled.button`
-margin-top: 16px;
 	padding: 8px 16px;
 	background: #eff3f4;
 	border: none;
