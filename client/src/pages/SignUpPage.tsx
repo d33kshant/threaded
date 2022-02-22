@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Button from "../components/Button"
+import SignUpInput from "../components/Input"
 import SignUpFormState from "../types/SignUpFormState"
 
 const SignUpPage: React.FC = () => {
@@ -21,15 +22,15 @@ const SignUpPage: React.FC = () => {
 
 	return (
 		<Container>
-			<SingUpForm onSubmit={onFormSubmit} >
-				<SingUpFormTitle>Sign-Up to Threaded</SingUpFormTitle>
-				<SingUpInput onChange={onFormStateChange} value={formState.username} name="username" type="text" placeholder="Username" />
-				<SingUpInput onChange={onFormStateChange} value={formState.email} name="email" type="text" placeholder="Email" />
-				<SingUpInput onChange={onFormStateChange} value={formState.password} name="password" type="password" placeholder="Password" />
-				<SingUpInput onChange={onFormStateChange} value={formState.confirmPassword} name="confirmPassword" type="password" placeholder="Confirm Password" />
-				<SingUpButton type="submit">Sign Up</SingUpButton>
+			<SignUpForm onSubmit={onFormSubmit} >
+				<SignUpFormTitle>Sign-Up to Threaded</SignUpFormTitle>
+				<SignUpInput onChange={onFormStateChange} value={formState.username} name="username" type="text" placeholder="Username" />
+				<SignUpInput onChange={onFormStateChange} value={formState.email} name="email" type="text" placeholder="Email" />
+				<SignUpInput onChange={onFormStateChange} value={formState.password} name="password" type="password" placeholder="Password" />
+				<SignUpInput onChange={onFormStateChange} value={formState.confirmPassword} name="confirmPassword" type="password" placeholder="Confirm Password" />
+				<SignUpButton type="submit">Sign Up</SignUpButton>
 				<span>Already have an account? <Link to="/login">Log In</Link></span>
-			</SingUpForm>
+			</SignUpForm>
 		</Container>
 	)
 }
@@ -48,7 +49,7 @@ const Container = styled.div`
 	gap: 16px;
 `
 
-const SingUpForm = styled.form`
+const SignUpForm = styled.form`
 	width: max-content;
 	display: flex;
 	flex-direction: column;
@@ -69,26 +70,13 @@ const SingUpForm = styled.form`
 	} */
 `
 
-const SingUpFormTitle = styled.span`
+const SignUpFormTitle = styled.span`
 	font-weight: 600;
 	font-size: 18px;
 	margin: 0;
 	margin-bottom: 12px;
 `
 
-const SingUpInput = styled.input`
-	padding: 8px;
-	border: 1px solid #6e767d;
-	border-radius: 4px;
-	font-family: inherit;
-	background: none;
-
-	:focus-visible {
-		outline: 1px solid #1d9bf0;
-		border-color: #1d9bf0;
-	}
-`
-
-const SingUpButton = styled(Button)`
+const SignUpButton = styled(Button)`
 	margin-bottom: 8px;
 `
