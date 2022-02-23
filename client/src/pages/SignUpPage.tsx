@@ -3,15 +3,39 @@ import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Button from "../components/Button"
 import SignUpInput from "../components/Input"
+import { useToastContext } from "../contexts/ToastContext"
+import { MessageType } from "../types/Message"
 import SignUpFormState from "../types/SignUpFormState"
 
 const SignUpPage: React.FC = () => {
 
 	const [formState, setFormState] = useState<SignUpFormState>({ username: "", email: "", password: "", confirmPassword: "" })
+	const toast = useToastContext()
 
 	const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		console.log(formState)
+
+		if (!formState.email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+			return toast({ type: MessageType.Error, body: "Please enter a valid email." })
+		}
+
+		if (formState.password !== formState.confirmPassword) {
+			return toast({ type: MessageType.Error, body: "Password fields didn't match." })
+		}
+
+		fetch('/api/auth/signup', {
+			headers: {
+				"Content-Type": "application/json",
+			},
+			method: "POST",
+			body: JSON.stringify(formState)
+		})
+		.then(res=>res.json()).then(res=>{
+			if (res.error) {
+				return toast({ type: MessageType.Error, body: res.error })
+			}
+			toast({ type: MessageType.Success, body: res.message })
+		})
 	}
 
 	const onFormStateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
