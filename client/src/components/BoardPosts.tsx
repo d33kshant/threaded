@@ -29,7 +29,7 @@ const BoardPosts: React.FC<BoardPostsProps> = ({ board }) => {
 
 	return (
 		<Container>
-			{ posts.length > 0 ? posts.map(post=><PostItem key={post._id} data={post} />) : "Nothing to show here" }
+			{ posts.length > 0 ? posts.map(post=><PostItem replyable={true} key={post._id} data={post} />) : "Nothing to show here" }
 		</Container>
 	)
 }
