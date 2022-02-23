@@ -2,7 +2,6 @@ const Post = require('../models/Post')
 const ObjectId = require('mongoose').Types.ObjectId
 
 const getPost = async (req, res) => {
-	try {
 		const id = req.params.id
 		const username = req.user?.username || ""
 		if (id) {
@@ -29,20 +28,15 @@ const getPost = async (req, res) => {
 			if (post) {
 				res.json(post)
 			} else {
-				res.status(404).json({
+				res.json({
 					error: "Post not found."
 				})
 			}
 		} else {
-			res.status(400).json({
+			res.json({
 				error: "Missing post id in request."
 			})
 		}
-	} catch (error) {
-		res.status(500).json({
-			error: "Something went wrong."
-		})
-	}
 }
 
 const getPosts = async (req, res) => {
@@ -174,14 +168,16 @@ const likePost = async (req, res) => {
 
 			res.json({
 				liked: false,
+				likes: post.likes.length,
 				message: "Post disliked."
 			})
 		} else {
 			post.likes.push(username)
 			await post.save()
-
+			
 			res.json({
 				liked: true,
+				likes: post.likes.length,
 				message: "Post liked."
 			})
 		}
@@ -193,4 +189,47 @@ const likePost = async (req, res) => {
 	}
 }
 
-module.exports = { getPost, getPosts, createPost, likePost }
+const getReplies = async (req, res) => {
+	const { id: post } = req.params
+	if (!post) {
+		return res.json({
+			error: "String `post` missing in request."
+		})
+	}
+
+	try {
+		const username = req.user?.username
+		const posts = await Post.aggregate([
+			{
+				$match: { ref: post },
+			},
+			{ 
+				$project: {
+					body: 1, author: 1, time: 1, board: 1, ref: 1,
+					likes: { $size: "$likes" }, replies: { $size: "$replies" },
+					liked: { 
+						$cond: [{
+							$gt: [{
+								$size: {
+									$setIntersection: ["$likes", [username]]
+								}
+							}, 0]
+						}, true, false] 
+					}
+				} 
+			},
+			{
+				$sort: { time: -1 }
+			}
+		])
+
+		res.json(posts)
+
+	} catch (error) {
+		res.json({
+			error: "Something went wrong."
+		})
+	}
+}
+
+module.exports = { getPost, getPosts, getReplies, createPost, likePost }
