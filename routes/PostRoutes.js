@@ -1,9 +1,10 @@
 const router = require('express').Router()
-const { getPost, getPosts, createPost, likePost } = require('../controllers/PostController')
+const { getPost, getPosts, createPost, likePost, getReplies } = require('../controllers/PostController')
 const { authenticate, authorize } = require('../controllers/AuthController')
 
 router.post('/create', authenticate, createPost)
 router.post('/like', authenticate, likePost)
+router.get('/:id/replies', authorize, getReplies)
 router.get('/:id', authorize, getPost)
 router.get('/', authorize, getPosts)
 
