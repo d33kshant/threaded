@@ -11,6 +11,7 @@ import ToastContextProvider from './contexts/ToastContext'
 import BoardPage from './pages/BoardPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import PostPage from './pages/PostPage'
 import ProfilePage from './pages/ProfilePage'
 import SignUpPage from './pages/SignUpPage'
 import './styles/App.css'
@@ -70,6 +71,8 @@ function App() {
 						<Route path="/board" element={<Navigate to="/" replace={true} />} />
 						<Route path="/user/:username" element={<ProfilePage />} />
 						<Route path="/user" element={<Navigate to="/" replace={true} />} />
+						<Route path="/post/:post" element={<PostPage />} />
+						<Route path="/post" element={<Navigate to="/" replace={true} />} />
 						<Route path="/login" element={ user ? <Navigate to="/" /> : <LoginPage/> } />
 						<Route path="/signup" element={ user ? <Navigate to="/" /> : <SignUpPage/> } />
 					</Routes>
