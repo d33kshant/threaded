@@ -8,6 +8,7 @@ import UserProfile from "../types/UserProfile"
 import Post from "../types/Post"
 import { useToastContext } from "../contexts/ToastContext"
 import { MessageType } from "../types/Message"
+import PostItem from "../components/Post"
 
 const ProfilePage = () => {
 	const { username } = useParams()
@@ -55,7 +56,7 @@ const ProfilePage = () => {
 					<UserName>{user.username}</UserName>
 					{ user.bio && <UserBio>{user.bio}</UserBio>}
 				</UserInfo>
-				{ posts.length > 0 && posts.map(post=><p key={post._id}>{post.body}</p>) }
+				{ posts.length > 0 && posts.map(post=><PostItem isReply={!!post.ref} replyable={!post.ref} data={post} key={post._id} />) }
 				</>
 			}
 		</Container>
