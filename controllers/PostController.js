@@ -50,10 +50,12 @@ const getPosts = async (req, res) => {
 
 	let filter = {}
 
-	if (board) filter.board = board
+	if (board) {
+		filter.board = board
+		filter.ref = ""
+	}
 	else if (author) filter.author = author
 
-	filter.ref = ""
 
 	const username = req.user?.username || ""
 	const page = req.query.page || 1
