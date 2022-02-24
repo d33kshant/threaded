@@ -5,12 +5,17 @@ import NavBar from "../components/NavBar"
 import Button from "../components/Button"
 import { useAuthContext } from "../contexts/AuthContext"
 import UserProfile from "../types/UserProfile"
+import Post from "../types/Post"
+import { useToastContext } from "../contexts/ToastContext"
+import { MessageType } from "../types/Message"
 
 const ProfilePage = () => {
 	const { username } = useParams()
 	const {user: currentUser, logout} = useAuthContext()
 	const [user, setUser] = useState<UserProfile | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
+	const [posts, setPosts] = useState<Post[]>([])
+	const toast = useToastContext()
 
 	useEffect(()=>{
 		fetch(`/api/user?username=${username}`)
@@ -20,6 +25,13 @@ const ProfilePage = () => {
 			}
 			setUser(res)
 			setLoading(false)
+		})
+		fetch(`/api/post?author=${username}`)
+		.then(res=>res.json()).then(res=>{
+			if (res.error) {
+				return toast({ type: MessageType.Error, body: res.error })
+			}
+			setPosts(res)
 		})
 	}, [])
 
@@ -41,6 +53,7 @@ const ProfilePage = () => {
 				</Header>
 				<UserName>{user.username}</UserName>
 				{ user.bio && <UserBio>{user.bio}</UserBio>}
+				{ posts.length > 0 && posts.map(post=><p key={post._id}>{post.body}</p>) }
 				</>
 			}
 		</Container>
