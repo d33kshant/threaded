@@ -50,7 +50,7 @@ const ProfilePage = () => {
 						<ProfileActions>
 							<LogOutButton onClick={logout}>Log Out</LogOutButton>
 						</ProfileActions> 
-					: <Button>{user.inFollowing ? "Unfollow" : "Follow"}</Button>}
+					: <Button>{user.inFollowing === true ? "Unfollow" : "Follow"}</Button>}
 					</Header>
 					<UserName>{user.username}</UserName>
 					{ user.bio && <UserBio>{user.bio}</UserBio>}
