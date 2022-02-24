@@ -40,13 +40,20 @@ const getPost = async (req, res) => {
 }
 
 const getPosts = async (req, res) => {
-	const board = req.query.board
+	const {board, author} = req.query
 
-	if (!board) {
+	if (!board && !author) {
 		return res.status(400).json({
-			error: "Board name is required."
+			error: "Either `board` or `author` is required."
 		})
 	}
+
+	let filter = {}
+
+	if (board) filter.board = board
+	else if (author) filter.author = author
+
+	filter.ref = ""
 
 	const username = req.user?.username || ""
 	const page = req.query.page || 1
@@ -56,7 +63,7 @@ const getPosts = async (req, res) => {
 
 		const posts = await Post.aggregate([
 			{
-				$match: { board, ref: "" },
+				$match: filter,
 			},
 			{ 
 				$project: {
