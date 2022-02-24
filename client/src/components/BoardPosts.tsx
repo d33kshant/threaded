@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
+import { useToastContext } from "../contexts/ToastContext"
 import BoardPostsProps from "../types/BoardPostsProps"
+import { MessageType } from "../types/Message"
 import Post from "../types/Post"
 import PostItem from "./Post"
 
 const BoardPosts: React.FC<BoardPostsProps> = ({ board }) => {
 	const [posts, setPosts] = useState<Post[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
+	const toast = useToastContext()
 
 	useEffect(()=>{
 		fetch(`/api/post?board=${board}`)
 		.then(res=>res.json()).then(res=>{
 			if (res.error) {
-				return alert(res.error)
+				return toast({ type: MessageType.Error, body: res.error })
 			}
 			setPosts(res)
 			setLoading(false)

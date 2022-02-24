@@ -21,7 +21,7 @@ const ProfilePage = () => {
 		fetch(`/api/user?username=${username}`)
 		.then(res=>res.json()).then(res=>{
 			if(res.error) {
-				return alert(res.error)
+				return toast({ type: MessageType.Error, body: res.error })
 			}
 			setUser(res)
 			setLoading(false)
