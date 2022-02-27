@@ -198,6 +198,44 @@ const likePost = async (req, res) => {
 	}
 }
 
+const deletePost = async (req, res) => {
+	const username = req.user?.username
+	const { id } = req.body
+
+	if (!id) {
+		return res.json({
+			error: "Field `id` missing in request body."
+		})
+	}
+
+	try {
+		const post = await Post.findById(id)
+		if (post) {
+			if (post.author === username) {
+				post.remove((error, result)=>{
+					if (error) {
+						res.json({
+							error: "Failed to delete post."
+						})
+					} else {
+						res.json({
+							message: "Post deleted successfully."
+						})
+					}
+				})
+			} else {
+				res.json({
+					error: "Only author can delete the post."
+				})
+			}
+		}
+	} catch (error) {
+		res.json({
+			error: "Something went wrong."
+		})
+	}
+}
+
 const getReplies = async (req, res) => {
 	const { id: post } = req.params
 	if (!post) {
@@ -241,4 +279,4 @@ const getReplies = async (req, res) => {
 	}
 }
 
-module.exports = { getPost, getPosts, getReplies, createPost, likePost }
+module.exports = { getPost, getPosts, getReplies, createPost, deletePost, likePost }
