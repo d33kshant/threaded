@@ -38,6 +38,19 @@ const Post: React.FC<PostProps> = ({ isReply, replyable, data: { _id, author, bo
 		})
 	}
 
+	const deletePost = () => {
+		const confirm = window.confirm('You are about to delete a post, Deleted post can not be recovered.')
+		if (confirm) {
+			fetch(`/api/post/delete/${_id}`).then(res=>res.json())
+			.then(res=>{
+				if (res.error) {
+					return toast({ type: MessageType.Error, body: res.error})
+				}
+				toast({ type: MessageType.Success, body: res.message })
+			})
+		}
+	}
+
 	return (
 		<Container onClick={()=>{ if (!isReply) window.open(`/post/${_id}`); else window.open(`/post/${ref}`)}}>
 			<PostHeader>
@@ -62,7 +75,7 @@ const Post: React.FC<PostProps> = ({ isReply, replyable, data: { _id, author, bo
 					}
 				</PostAction>}
 				{ author === user?.username &&
-				<PostAction style={{color: "red", marginLeft: "auto"}}>
+				<PostAction onClick={deletePost} style={{color: "red", marginLeft: "auto"}}>
 					<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
 				</PostAction> }
 			</PostFooter>
