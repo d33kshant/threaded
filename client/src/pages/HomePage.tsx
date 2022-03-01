@@ -1,11 +1,30 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import Button from "../components/Button"
 import NavBar from "../components/NavBar"
+import PostItem from "../components/Post"
+import { useToastContext } from "../contexts/ToastContext"
+import { MessageType } from "../types/Message"
+import Post from "../types/Post"
 
 const HomePage: React.FC = () => {
 	
 	const inputRef = useRef<HTMLDivElement>(null)
+	const [loading, setLoading] = useState<boolean>(true)
+	const [posts, setPosts] = useState<Post[]>([])
+
+	const toast = useToastContext()
+
+	useEffect(()=>{
+		fetch(`/api/post/feed`).then(res=>res.json())
+		.then(res=>{
+			if(res.error) {
+				return toast({ type: MessageType.Error, body: res.error })
+			}
+			setPosts(res)
+			setLoading(false)
+		})
+	}, [])
 
 	const createNewPost = () => {
 		alert(inputRef.current?.innerText)
@@ -21,7 +40,12 @@ const HomePage: React.FC = () => {
 			<NewPost>
 				<NewPostInput ref={inputRef} contentEditable={true} placeholder="What's happening ?" />
 				<PostButton onClick={createNewPost}>Post</PostButton>
-			</NewPost>	
+			</NewPost>
+			<PostsList>
+				{ loading && "Loading..." }
+				{ (!loading && posts.length <= 0) && "No post Found" }
+				{ (!loading && posts.length > 0) && posts.map(post=><PostItem key={post._id} data={post} isReply={!!post.ref} replyable={!post.ref} />) }
+			</PostsList>	
 		</Container>
 		</>
 	)
@@ -75,4 +99,9 @@ const PostButton = styled(Button)`
 	:disabled {
 		opacity: 0.5;
 	}
+`
+
+const PostsList = styled.div`
+	display: flex;
+	flex-direction: column;
 `
