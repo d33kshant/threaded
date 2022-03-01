@@ -1,4 +1,5 @@
 const Post = require('../models/Post')
+const User = require('../models/User')
 const ObjectId = require('mongoose').Types.ObjectId
 
 const getPost = async (req, res) => {
@@ -93,6 +94,75 @@ const getPosts = async (req, res) => {
 		res.json({
 			error: "Something went wrong."
 		})
+	}
+}
+
+const getFeed = async (req, res) => {
+	const username = req.user?.username
+
+	if (username) {
+		const user = await User.findOne({ username })
+		if (!user) {
+			return res.json({
+				error: "Failed to fetch user info."
+			})
+		}
+		const boards = user.boards
+		const posts = await Post.aggregate([
+			{
+				$match: { board: { $all: boards } }
+			},
+			{
+				$limit: 10,
+			},
+			{ 
+				$project: {
+					body: 1, author: 1, time: 1, board: 1, ref: 1,
+					likes: { $size: "$likes" }, replies: { $size: "$replies" },
+					liked: { 
+						$cond: [{
+							$gt: [{
+								$size: {
+									$setIntersection: ["$likes", [username]]
+								}
+							}, 0]
+						}, true, false] 
+					}
+				} 
+			},
+			{
+				$sort: { time: -1 }
+			}
+		])
+		res.json(posts)
+	} else {
+		const posts = Post.aggregate([
+			{
+				$match: {}
+			},
+			{
+				$sort: { time: -1 }
+			},
+			{
+				$limit: 10,
+			},
+			{ 
+				$project: {
+					body: 1, author: 1, time: 1, board: 1, ref: 1,
+					likes: { $size: "$likes" }, replies: { $size: "$replies" },
+					liked: { 
+						$cond: [{
+							$gt: [{
+								$size: {
+									$setIntersection: ["$likes", [username]]
+								}
+							}, 0]
+						}, true, false] 
+					}
+				} 
+			},
+		])
+		res.json(posts)
 	}
 }
 
@@ -279,4 +349,4 @@ const getReplies = async (req, res) => {
 	}
 }
 
-module.exports = { getPost, getPosts, getReplies, createPost, deletePost, likePost }
+module.exports = { getPost, getPosts, getFeed, getReplies, createPost, deletePost, likePost }
