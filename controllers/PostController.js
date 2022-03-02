@@ -110,7 +110,7 @@ const getFeed = async (req, res) => {
 		const boards = user.boards
 		const posts = await Post.aggregate([
 			{
-				$match: { board: { $all: boards } }
+				$match: { board: { $all: boards }, ref: "" }
 			},
 			{
 				$limit: 10,
@@ -138,7 +138,7 @@ const getFeed = async (req, res) => {
 	} else {
 		const posts = Post.aggregate([
 			{
-				$match: {}
+				$match: { ref: "" }
 			},
 			{
 				$sort: { time: -1 }
